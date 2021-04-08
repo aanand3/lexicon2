@@ -1,6 +1,7 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
+import Table from './Table.js'
 
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
           <h2> this is where search will go </h2>
         </Container>
         <Container>
-          <h2> this is where the table will go </h2>
+          <Table />
         </Container>
       </header>
     </div>
