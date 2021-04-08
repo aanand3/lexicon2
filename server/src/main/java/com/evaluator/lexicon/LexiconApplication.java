@@ -1,13 +1,13 @@
-package com.example.server;
+package com.evaluator.lexicon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ServerApplication {
+public class LexiconApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ServerApplication.class, args);
+		SpringApplication.run(LexiconApplication.class, args);
 	}
 
 }
