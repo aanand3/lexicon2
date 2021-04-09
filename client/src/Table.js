@@ -1,23 +1,38 @@
 import React from 'react'
 
-const Table = () => {
+class Table extends React.Component {
+    constructor(props) {
+        super(props)
 
-    function fetchTB(){
-        let url = "https://afc-lexicon.herokuapp.com/lexicon"
-        fetch(url)
-            .then(res => { 
-                return res.json();
-            })
-            .catch((error) => {
-                console.log(error)})
+        this.state = {
+            list: []
+        }
     }
 
-    function myTableBody(){
-        // let list = [{"word": "tantamount", "price": "$5"}, 
-        //             {"word": "laborious", "price": "$4"}];
-        let list = fetchTB();
+     componentDidMount(){
+        this.fetchTB();
+    }
+
+    fetchTB(){
+        return fetch("https://afc-lexicon.herokuapp.com/lexicon",
+        {
+            method: "GET",
+            headers: {
+            'Accept': 'application/JSON',
+            'Content-Type': 'application/JSON',
+          },
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+          console.log(responseData);
+          this.setState({list:responseData})
+        })
+        .catch(error => console.warn(error));
+    }
+
+    myTableBody(){
         return(
-            list.map(word =>
+            this.state.list.map(word =>
             <tr>
                 <td>{word.word}</td>
                 <td>{word.value}</td>
@@ -26,17 +41,20 @@ const Table = () => {
         );
     }
 
-    return (
-        <table class="table table-dark table-bordered w-auto centered m-auto">
+    render(){
+        return (
+        <table className="table table-dark table-bordered w-auto centered m-auto">
             <thead>
                 <tr>
                     <th scope="col">Word</th>
                     <th scope="col">Price</th>
                 </tr>
             </thead>
-            <tbody>{myTableBody()}</tbody>
+            <tbody>{this.myTableBody()}</tbody>
         </table>
-    )
+        )
+    }
+    
 }
 
 export default Table
