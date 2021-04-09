@@ -3,17 +3,24 @@ import React from 'react'
 const Table = () => {
 
     function fetchTB(){
-        //this is for the fetch request
+        let url = "https://afc-lexicon.herokuapp.com/lexicon"
+        fetch(url)
+            .then(res => { 
+                return res.json();
+            })
+            .catch((error) => {
+                console.log(error)})
     }
 
     function myTableBody(){
-        let list = [{"word": "tantamount", "price": "$5"}, 
-                    {"word": "laborious", "price": "$4"}];
+        // let list = [{"word": "tantamount", "price": "$5"}, 
+        //             {"word": "laborious", "price": "$4"}];
+        let list = fetchTB();
         return(
             list.map(word =>
             <tr>
                 <td>{word.word}</td>
-                <td>{word.price}</td>
+                <td>{word.value}</td>
             </tr>
             )
         );
