@@ -50,13 +50,13 @@ export default class Search extends Component
         console.log(usage);
         if (usage < 0.00005)
         {
-            this.setState({ wordWorth: 5 })
+            this.setState({ wordWorth: "five-dollar" })
         }
         else if (usage < 0.0001)
         {
-            this.setState({ wordWorth: 4 })
+            this.setState({ wordWorth: "four-dollar" })
         }
-        else this.setState({ wordWorth: 0 })
+        else this.setState({ wordWorth: "peasant" })
     }
 
     async handleSubmit(event)
@@ -70,10 +70,10 @@ export default class Search extends Component
 
     buildWorthRow()
     {
-        if (this.state.wordWorth > 0)
+        if (this.state.wordWorth)
         {
             return <Row className="justify-content-md-center mb-5">
-                This is a {this.state.wordWorth}-dollar word!
+                This is a {this.state.wordWorth} word!
             </Row>
         }
     }
