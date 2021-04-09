@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Container, Row } from 'react-bootstrap'
 
 
 export default class Search extends Component
@@ -9,10 +9,8 @@ export default class Search extends Component
     {
         super(props)
         this.state = {
-            myWord: {
-                "word": "",
-                "price": 0
-            },
+            rawWordData: {},
+            wordWorth: 0,
             userInput: 'hello'
         };
         this.recordUserResponse = this.recordUserResponse.bind(this);
@@ -36,6 +34,7 @@ export default class Search extends Component
             const response = await fetchJsonp(url);
             const json = await response.json();
             console.log(json[0]);
+            this.setState({ rawWordData: json[0] })
 
         }
         catch (error)
@@ -44,19 +43,55 @@ export default class Search extends Component
         }
     }
 
-    handleSubmit(event)
+    calculateWordWorth()
     {
-        event.preventDefault();
-        console.log('submit detected')
+        // need to multiply by 100 to get it as a %
+        let usage = this.state.rawWordData.timeseries[1] * 100;
+        console.log(usage);
+        if (usage < 0.00005)
+        {
+            this.setState({ wordWorth: 5 })
+        }
+        else if (usage < 0.0001)
+        {
+            this.setState({ wordWorth: 4 })
+        }
+        else this.setState({ wordWorth: 0 })
+    }
+
+    async handleSubmit(event)
+    {
+        event.preventDefault(); // dont wanna refresh whole page
+
+        // fetch data from ngrams and calculate worth
+        await this.fetchInfo();
+        this.calculateWordWorth();
+    }
+
+    buildWorthRow()
+    {
+        if (this.state.wordWorth > 0)
+        {
+            return <Row className="justify-content-md-center mb-5">
+                This is a {this.state.wordWorth}-dollar word!
+            </Row>
+        }
     }
 
     render()
     {
+        var rowWorth = this.buildWorthRow() || null;
+ 
         return (
-            <Form className="m-5" onSubmit={this.handleSubmit}>
-                <Form.Control type="text" onChange={this.recordUserResponse} placeholder="Please Input a $5 Word" />
-                <Button type="submit " variant="light" className = "m-2"> Submit </Button>
-            </Form>
+            <Container className="justify-content-md-center">
+                <Row className="justify-content-md-center">
+                    <Form className="m-5" onSubmit={this.handleSubmit}>
+                        <Form.Control type="text" onChange={this.recordUserResponse} placeholder="Please Input a $5 Word" />
+                        <Button type="submit " variant="light" className="m-2"> Submit </Button>
+                    </Form>
+                </Row>
+                {rowWorth}
+            </Container>
         );
     }
 }
